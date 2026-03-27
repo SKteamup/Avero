@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — EiendomsAnalyse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/admin.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════════ -->
+<div class="admin-login-page" id="login-page">
+  <div class="admin-login-box">
+    <div class="admin-login-brand">
+      <div class="admin-login-brand-mark">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg>
+      </div>
+      <span class="admin-login-brand-text">EiendomsAnalyse</span>
+      <span class="admin-badge">Admin</span>
+    </div>
+
+    <h1 class="admin-login-title">Administratorpanel</h1>
+    <p class="admin-login-sub">Logg inn for å administrere objekter og brukere.</p>
+
+    <form id="login-form" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:12px;font-weight:600;color:var(--gray-700)">E-postadresse</label>
+        <div style="position:relative">
+          <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--gray-400);pointer-events:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="login-email" value="admin@eiendomsanalyse.no" style="width:100%;padding:9px 10px 9px 32px;border:1px solid #e5e7eb;border-radius:6px;font-family:var(--font-body);font-size:13px;outline:none;transition:border-color var(--transition)" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='#e5e7eb'">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:12px;font-weight:600;color:var(--gray-700)">Passord</label>
+        <div style="position:relative">
+          <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--gray-400);pointer-events:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="login-pw" value="admin123" style="width:100%;padding:9px 10px 9px 32px;border:1px solid #e5e7eb;border-radius:6px;font-family:var(--font-body);font-size:13px;outline:none;transition:border-color var(--transition)" onfocus="this.style.borderColor='var(--navy)'" onblur="this.style.borderColor='#e5e7eb'">
+        </div>
+      </div>
+      <span id="login-error" class="hidden" style="font-size:12px;color:var(--red);display:flex;align-items:center;gap:5px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Feil e-post eller passord
+      </span>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:4px;padding:11px 16px;font-size:14px" id="login-btn">
+        Logg inn
+      </button>
+    </form>
+
+    <p style="font-size:11px;color:var(--gray-400);text-align:center;margin-top:16px">Demo: bruk admin@eiendomsanalyse.no / admin123</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     ADMIN APP
+═══════════════════════════════════════════ -->
+<div class="admin-app" id="admin-app">
+
+  <!-- TOPBAR -->
+  <div class="admin-topbar">
+    <div class="admin-topbar-inner">
+      <a href="index.html" class="admin-topbar-brand">
+        <div class="admin-topbar-brand-mark">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg>
+        </div>
+        <span class="admin-topbar-brand-text">Eiendoms<span>Analyse</span></span>
+      </a>
+      <div class="admin-topbar-sep"></div>
+      <span class="admin-badge">Admin</span>
+
+      <div class="admin-topbar-user">
+        <div class="admin-topbar-user-info">
+          <strong id="topbar-user-name">Admin</strong>
+          Administrator
+        </div>
+        <button class="admin-logout-btn" id="logout-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Logg ut
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar">
+    <nav class="admin-nav">
+      <div class="admin-nav-section">
+        <span class="admin-nav-label">Innhold</span>
+        <button class="admin-nav-item active" id="nav-objekter" onclick="showView('objekter')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Objekter
+          <span class="admin-nav-count" id="nav-obj-count">0</span>
+        </button>
+        <button class="admin-nav-item" id="nav-brukere" onclick="showView('brukere')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Brukere
+          <span class="admin-nav-count" id="nav-usr-count">0</span>
+        </button>
+      </div>
+      <div class="admin-nav-section">
+        <span class="admin-nav-label">Lenker</span>
+        <a href="sok.html" class="admin-nav-item" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Se søkesiden
+        </a>
+        <a href="kalkulator.html" class="admin-nav-item" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Kalkulator
+        </a>
+      </div>
+    </nav>
+    <div class="admin-sidebar-bottom">
+      <div style="font-size:11px;color:var(--gray-400);line-height:1.5">
+        EiendomsAnalyse v2<br>Sist oppdatert: i dag
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="admin-main">
+
+    <!-- ── OBJEKTER VIEW ──────────────────────── -->
+    <div id="view-objekter">
+
+      <div class="admin-page-header">
+        <div>
+          <h1 class="admin-page-title">Objekter</h1>
+          <p class="admin-page-sub">Administrer alle investeringsobjekter på plattformen</p>
+        </div>
+        <div class="admin-page-actions">
+          <button class="btn btn-secondary btn-sm" onclick="exportCSV()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Eksport CSV
+          </button>
+          <button class="btn btn-primary" id="btn-nytt-objekt" onclick="openForm(null)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nytt objekt
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="admin-stats" id="obj-stats"></div>
+
+      <!-- Toolbar -->
+      <div class="admin-toolbar">
+        <div class="admin-search-wrap">
+          <svg class="admin-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="admin-search" id="obj-search" placeholder="Søk etter adresse, by, type…">
+        </div>
+        <select class="admin-filter-select" id="obj-status-filter">
+          <option value="">Alle statuser</option>
+          <option value="Publisert">Publisert</option>
+          <option value="Utkast">Utkast</option>
+          <option value="Inaktiv">Inaktiv</option>
+        </select>
+        <select class="admin-filter-select" id="obj-strategi-filter">
+          <option value="">Alle strategier</option>
+          <option value="utleie">Utleie</option>
+          <option value="flipp">Flipp</option>
+        </select>
+        <select class="admin-filter-select" id="obj-by-filter">
+          <option value="">Alle byer</option>
+        </select>
+      </div>
+
+      <!-- Bulk bar -->
+      <div class="admin-bulk-bar" id="bulk-bar">
+        <span class="admin-bulk-label" id="bulk-label">0 valgt</span>
+        <div class="admin-bulk-actions">
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.2)" onclick="bulkAksjon('publiser')">Publiser</button>
+          <button class="btn btn-sm" style="background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.2)" onclick="bulkAksjon('utkast')">Sett til utkast</button>
+          <button class="btn btn-sm" style="background:rgba(220,38,38,.25);color:#fca5a5;border:1px solid rgba(220,38,38,.3)" onclick="bulkAksjon('inaktiv')">Deaktiver</button>
+        </div>
+        <button style="margin-left:auto;color:rgba(255,255,255,.5);background:none;border:none;cursor:pointer;font-size:12px;font-family:var(--font-body)" onclick="clearSelection()">Avbryt</button>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th style="width:36px">
+                <input type="checkbox" id="select-all" style="accent-color:var(--navy);width:14px;height:14px;cursor:pointer">
+              </th>
+              <th>Objekt</th>
+              <th>By</th>
+              <th>Strategi</th>
+              <th class="sortable" onclick="sortTabell('pris')">Pris ▾</th>
+              <th>Yield / ROI</th>
+              <th>Score</th>
+              <th>Status</th>
+              <th>Lagt til</th>
+              <th style="width:96px"></th>
+            </tr>
+          </thead>
+          <tbody id="obj-tbody"></tbody>
+        </table>
+        <div id="obj-empty" class="admin-empty hidden">
+          <div class="admin-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          </div>
+          <div class="admin-empty-title">Ingen objekter funnet</div>
+          <div class="admin-empty-text">Prøv et annet søk eller opprett et nytt objekt.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BRUKERE VIEW ────────────────────────── -->
+    <div id="view-brukere" class="hidden">
+      <div class="admin-page-header">
+        <div>
+          <h1 class="admin-page-title">Brukere</h1>
+          <p class="admin-page-sub">Oversikt over registrerte brukere</p>
+        </div>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Navn</th>
+              <th>E-post</th>
+              <th>Plan</th>
+              <th>Registrert</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="usr-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /admin-main -->
+</div><!-- /admin-app -->
+
+<!-- ═══════════════════════════════════════════
+     OBJECT FORM DRAWER
+═══════════════════════════════════════════ -->
+<div class="form-overlay" id="form-overlay">
+  <div class="obj-form-drawer" id="obj-form-drawer">
+
+    <!-- Header -->
+    <div class="obj-form-header">
+      <div>
+        <div class="obj-form-title" id="form-drawer-title">Nytt objekt</div>
+        <div class="obj-form-title-sub" id="form-drawer-sub">Fyll ut feltene nedenfor</div>
+      </div>
+      <div class="obj-form-header-actions">
+        <div class="unsaved-dot" id="unsaved-dot" title="Ulagrede endringer"></div>
+        <button class="btn btn-secondary btn-sm" onclick="closeForm()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Lukk
+        </button>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="obj-form-body" id="form-body">
+      <!-- Sections injected by JS -->
+    </div>
+
+    <!-- Footer -->
+    <div class="obj-form-footer">
+      <div class="obj-form-footer-left">
+        <button class="btn btn-sm" style="border-color:#e5e7eb;color:var(--gray-600)" id="form-status-toggle" onclick="toggleFormStatus()">
+          <span id="form-status-label">Sett til utkast</span>
+        </button>
+        <button class="btn btn-sm" style="border-color:#fecaca;color:var(--red);display:none" id="form-delete-btn" onclick="promptDelete()">Slett objekt</button>
+      </div>
+      <div class="obj-form-footer-right">
+        <button class="btn btn-secondary btn-sm" onclick="closeForm()">Avbryt</button>
+        <button class="btn btn-sm" style="background:rgba(15,31,61,.08);color:var(--navy);border-color:rgba(15,31,61,.12)" onclick="saveForm('Utkast')">Lagre utkast</button>
+        <button class="btn btn-primary btn-sm" onclick="saveForm('Publisert')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Publiser
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CONFIRM MODAL
+═══════════════════════════════════════════ -->
+<div class="confirm-modal-overlay" id="confirm-overlay">
+  <div class="confirm-modal">
+    <div class="confirm-modal-title" id="confirm-title">Er du sikker?</div>
+    <p class="confirm-modal-text" id="confirm-text"></p>
+    <div class="confirm-modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeConfirm()">Avbryt</button>
+      <button class="btn btn-sm" style="background:var(--red);color:white;border-color:var(--red)" id="confirm-ok-btn">Bekreft</button>
+    </div>
+  </div>
+</div>
+
+<div id="admin-toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/data.js"></script>
+<script type="module" src="js/supabase/init.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

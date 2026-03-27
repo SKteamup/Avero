@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Objektdetalj — EiendomsAnalyse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/objekt.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div id="navbar-root"></div>
+
+  <main class="page-main objekt-page">
+    <div class="container">
+
+      <!-- BREADCRUMB -->
+      <nav class="obj-breadcrumb" aria-label="Brødsmulesti">
+        <a href="index.html">Hjem</a>
+        <svg class="obj-breadcrumb-sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="sok.html">Søk</a>
+        <svg class="obj-breadcrumb-sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span id="bc-tittel" style="color:var(--gray-700)">Laster…</span>
+      </nav>
+
+      <!-- HERO GALLERY -->
+      <div class="obj-hero">
+        <div class="obj-hero-gallery">
+          <div class="obj-hero-main" id="hero-main">
+            <img id="hero-main-img" src="" alt="">
+          </div>
+          <div class="obj-hero-thumbs" id="hero-thumbs"></div>
+        </div>
+      </div>
+
+      <!-- TITLE ROW -->
+      <div class="obj-title-row">
+        <div class="obj-title-left">
+          <div class="obj-badges" id="obj-badges"></div>
+          <h1 class="obj-title" id="obj-title">Laster…</h1>
+          <p class="obj-address" id="obj-address">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span></span>
+          </p>
+        </div>
+        <div class="obj-title-actions">
+          <button class="btn btn-secondary btn-sm" id="fav-btn" aria-label="Legg til favoritter">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span id="fav-label">Lagre</span>
+          </button>
+          <button class="btn btn-secondary btn-sm" id="share-btn" aria-label="Del">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            Del
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN LAYOUT -->
+      <div class="obj-layout">
+
+        <!-- ── MAIN CONTENT ──────────────────── -->
+        <div class="obj-main" id="obj-main">
+          <!-- Filled by JS -->
+        </div>
+
+        <!-- ── SIDEBAR ───────────────────────── -->
+        <div class="obj-sidebar">
+          <div class="obj-sidebar-sticky" id="obj-sidebar">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script type="module" src="js/supabase/init.js"></script>
+<script src="js/objekt.js"></script>
+</body>
+</html>
