@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Søk objekter — EiendomsAnalyse</title>
+  <meta name="description" content="Søk og filtrer norske investeringsobjekter på yield, by, type, eierform og investorscore.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/sok.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div id="navbar-root"></div>
+
+  <main class="page-main">
+    <div class="sok-page">
+
+      <div class="sok-topbar">
+        <div class="container">
+          <div class="sok-topbar-inner">
+
+            <button class="filter-toggle-btn" id="filter-open-btn" aria-label="Åpne filter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+              Filter
+              <span class="filter-count-bubble hidden" id="filter-bubble">0</span>
+            </button>
+
+            <div class="sok-search-wrap">
+              <svg class="sok-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="sok-search-input" id="search-input" placeholder="Søk på adresse, sted, type…" autocomplete="off">
+            </div>
+
+            <div class="sok-sort-wrap">
+              <select class="sok-sort" id="sort-select" aria-label="Sorter etter">
+                <option value="dato">Nyeste</option>
+                <option value="score-desc">Høyest score</option>
+                <option value="yield-desc">Høyest yield</option>
+                <option value="pris-asc">Lavest pris</option>
+                <option value="pris-desc">Høyest pris</option>
+              </select>
+            </div>
+
+            <button class="save-search-btn" id="save-search-btn" aria-label="Lagre søk">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              <span class="save-search-label">Lagre søk</span>
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="sok-body">
+
+        <aside class="filter-sidebar" id="filter-sidebar" aria-label="Filteralternativer">
+          <div id="filter-panel-content"></div>
+        </aside>
+
+        <div class="sok-results">
+
+          <div class="results-header">
+            <p class="results-count">
+              Viser <strong id="result-count">0</strong> objekter
+            </p>
+          </div>
+
+          <div class="active-chips" id="active-chips" aria-live="polite"></div>
+
+          <div class="property-grid" id="property-grid" aria-live="polite">
+          </div>
+
+          <div class="empty-state hidden" id="empty-state">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <h3 class="empty-title">Ingen treff</h3>
+            <p class="empty-text">Ingen objekter matcher valgte filtre. Prøv å utvide søket eller nullstill filteret.</p>
+            <button class="btn btn-secondary btn-sm" id="empty-reset">Nullstill filter</button>
+          </div>
+
+          <nav class="pagination" id="pagination" aria-label="Sidenavigasjon"></nav>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+</div>
+
+<div class="filter-backdrop" id="filter-backdrop"></div>
+<div class="filter-drawer" id="filter-drawer" role="dialog" aria-modal="true" aria-label="Filteralternativer">
+  <div class="filter-drawer-header">
+    <span class="filter-drawer-title">Filter</span>
+    <button class="filter-drawer-close" id="filter-close-btn" aria-label="Lukk filter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="filter-drawer-body" id="filter-drawer-body"></div>
+  <div class="filter-drawer-footer">
+    <button class="btn btn-secondary" style="flex:1" id="drawer-reset">Nullstill</button>
+    <button class="btn btn-primary" style="flex:2" id="drawer-apply">Vis resultater</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="save-modal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 class="modal-title">Lagre søk</h2>
+      <button class="modal-close" id="modal-close" aria-label="Lukk">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-summary" id="modal-summary">Alle objekter</div>
+    <div class="form-group">
+      <label class="form-label" for="search-name">Navn på søket</label>
+      <input type="text" class="form-input" id="search-name" placeholder="F.eks. Oslo utleie 5%+" maxlength="60" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="modal-cancel">Avbryt</button>
+      <button class="btn btn-primary btn-full" id="modal-save">Lagre søk</button>
+    </div>
+    <p style="text-align:center;font-size:12px;color:var(--gray-400);margin:10px 20px 0;padding-bottom:4px">Lagrede søk finner du under Min side</p>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script type="module" src="js/supabase/init.js"></script>
+<script type="module" src="js/sok.js"></script>
+</body>
+</html>

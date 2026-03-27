@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eiendomskalkulator — Yield, kontantstrøm og flipp-ROI | EiendomsAnalyse</title>
+  <meta name="description" content="Gratis eiendomskalkulator for norske investorer. Beregn yield, netto kontantstrøm og flipp-ROI på sekunder. Prøv nå — ingen registrering.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/kalkulator.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div id="navbar-root"></div>
+
+  <main class="page-main kalk-page">
+
+    <div class="kalk-hero">
+      <div class="container">
+        <div class="kalk-hero-inner">
+          <div class="kalk-hero-kicker">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Gratis · Ingen registrering
+          </div>
+          <h1 class="kalk-hero-title">
+            Vet du egentlig<br>om objektet <em>lønner seg?</em>
+          </h1>
+          <p class="kalk-hero-lead">
+            Legg inn tallene, se svaret med en gang. Kalkulatoren beregner yield, kontantstrøm og flipp-ROI — med tydelig vurdering av hva tallene betyr.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="kalk-switcher-wrap">
+      <div class="container">
+        <div class="kalk-switcher" role="tablist" aria-label="Velg kalkulator">
+          <button class="kalk-tab active" id="tab-utleie" role="tab" aria-selected="true" aria-controls="panel-utleie">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Utleiekalkulator
+          </button>
+          <button class="kalk-tab" id="tab-flipp" role="tab" aria-selected="false" aria-controls="panel-flipp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Flipp-kalkulator
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="kalk-panel active" id="panel-utleie" role="tabpanel" aria-labelledby="tab-utleie">
+        <div class="kalk-grid">
+
+          <div class="kalk-inputs">
+            <div class="kalk-inputs-header">
+              <span class="kalk-inputs-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Legg inn tallene
+              </span>
+              <button class="kalk-reset" id="u-reset">Nullstill</button>
+            </div>
+
+            <div class="kalk-input-section">
+              <span class="kalk-section-label">Kjøpsdetaljer</span>
+              <div class="kalk-fields">
+                <div class="kalk-field">
+                  <label class="kalk-label" for="u-kjopspris">
+                    Prisantydning
+                    <span class="kalk-label-hint">Annonsert pris</span>
+                  </label>
+                  <div class="kalk-input-wrap">
+                    <input type="number" class="kalk-input" id="u-kjopspris" value="4200000" min="0" step="50000">
+                    <span class="kalk-input-suffix">kr</span>
+                  </div>
+                </div>
+                <div class="kalk-fields-2">
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="u-fellesgjeld">Fellesgjeld</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="u-fellesgjeld" value="420000" min="0" step="10000">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                  </div>
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="u-dok">Dok.avgift</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="u-dok" value="0" min="0" step="1000">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                    <p class="kalk-micro">2,5% ved selveier</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="kalk-input-section">
+              <span class="kalk-section-label">Finansiering</span>
+              <div class="kalk-fields">
+                <div class="kalk-field">
+                  <label class="kalk-label" for="u-egenkapital">
+                    Egenkapital
+                    <span class="kalk-label-hint" id="u-ek-pst">—%</span>
+                  </label>
+                  <div class="kalk-input-wrap">
+                    <input type="number" class="kalk-input" id="u-egenkapital" value="1050000" min="0" step="50000">
+                    <span class="kalk-input-suffix">kr</span>
+                  </div>
+                </div>
+                <div class="kalk-fields-2">
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="u-rente">Rente</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="u-rente" value="5.25" min="0" max="20" step="0.25">
+                      <span class="kalk-input-suffix">%</span>
+                    </div>
+                  </div>
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="u-lopetid">Løpetid</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="u-lopetid" value="25" min="5" max="30" step="1">
+                      <span class="kalk-input-suffix">år</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="kalk-input-section">
+              <span class="kalk-section-label">Inntekter og kostnader</span>
+              <div class="kalk-fields">
+                <div class="kalk-field">
+                  <label class="kalk-label" for="u-leie">
+                    Estimert månedlig leie
+                    <span class="kalk-label-hint">Sjekk Finn.no</span>
+                  </label>
+                  <div class="kalk-input-wrap">
+                    <input type="number" class="kalk-input" id="u-leie" value="14500" min="0" step="500">
+                    <span class="kalk-input-suffix">kr</span>
+                  </div>
+                </div>
+                <div class="kalk-fields-2">
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="u-felleskost">Felleskostnader</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="u-felleskost" value="2800" min="0" step="100">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                  </div>
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="u-vedl">
+                      Vedlikehold
+                      <span class="kalk-label-hint">Est.</span>
+                    </label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="u-vedl" value="1750" min="0" step="100">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="kalk-field">
+                  <label class="kalk-label" for="u-ledig">
+                    Ledighetsfaktor
+                    <span class="kalk-label-hint" id="u-ledig-vis">5%</span>
+                  </label>
+                  <div class="kalk-slider-wrap">
+                    <input type="range" class="kalk-slider" id="u-ledig" min="0" max="20" step="1" value="5">
+                    <span class="kalk-slider-val" id="u-ledig-val">5%</span>
+                  </div>
+                  <p class="kalk-micro">Andel av år uten leietaker. Typisk 3–8% for attraktive objekter.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kalk-results" id="u-results"></div>
+
+        </div>
+
+        <div class="kalk-faq">
+          <h2 class="kalk-faq-title">Slik beregner kalkulatoren</h2>
+          <div class="kalk-faq-grid">
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Hva er brutto yield?</p>
+              <p class="kalk-faq-a">Brutto yield = (Månedlig leie × 12) ÷ Kjøpspris × 100. Viser avkastning før kostnader. Over 5% regnes generelt som bra i norske byer.</p>
+            </div>
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Hva er netto yield?</p>
+              <p class="kalk-faq-a">Netto yield = ((Leie − Felleskostnader) × 12) ÷ Kjøpspris × 100. Mer realistisk mål fordi felleskostnader er faste uavhengig av utleie.</p>
+            </div>
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Hva betyr kontantstrøm?</p>
+              <p class="kalk-faq-a">Netto beløp i lomma per måned: Leie − felleskostnader − vedlikehold − terminbeløp på lån. Positiv kontantstrøm betyr at leietaker betaler mer enn det koster deg.</p>
+            </div>
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Hva er ledighetsfaktor?</p>
+              <p class="kalk-faq-a">Andel av året du antar at boligen står tom mellom leietakere. 5% = ca. 18 dager/år. Husk dette i et optimistisk scenario — sett gjerne 8–10%.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="kalk-panel" id="panel-flipp" role="tabpanel" aria-labelledby="tab-flipp">
+        <div class="kalk-grid">
+
+          <div class="kalk-inputs">
+            <div class="kalk-inputs-header">
+              <span class="kalk-inputs-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Legg inn tallene
+              </span>
+              <button class="kalk-reset" id="f-reset">Nullstill</button>
+            </div>
+
+            <div class="kalk-input-section">
+              <span class="kalk-section-label">Kjøpsdetaljer</span>
+              <div class="kalk-fields">
+                <div class="kalk-field">
+                  <label class="kalk-label" for="f-kjopspris">Kjøpspris</label>
+                  <div class="kalk-input-wrap">
+                    <input type="number" class="kalk-input" id="f-kjopspris" value="6800000" min="0" step="100000">
+                    <span class="kalk-input-suffix">kr</span>
+                  </div>
+                </div>
+                <div class="kalk-fields-2">
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="f-dokavgift">Dok.avgift</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="f-dokavgift" value="170000" min="0" step="5000">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                    <p class="kalk-micro">2,5% av kjøpspris</p>
+                  </div>
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="f-meglerkjop">Megler (kjøp)</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="f-meglerkjop" value="0" min="0" step="5000">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="kalk-input-section">
+              <span class="kalk-section-label">Renovering</span>
+              <div class="kalk-fields">
+                <div class="kalk-field">
+                  <label class="kalk-label" for="f-rehab">
+                    Renoveringskostnad
+                    <span class="kalk-label-hint">Din estimat</span>
+                  </label>
+                  <div class="kalk-input-wrap">
+                    <input type="number" class="kalk-input" id="f-rehab" value="850000" min="0" step="50000">
+                    <span class="kalk-input-suffix">kr</span>
+                  </div>
+                </div>
+                <div class="kalk-field">
+                  <label class="kalk-label" for="f-buffer">
+                    Buffer
+                    <span class="kalk-label-hint" id="f-buf-vis">15%</span>
+                  </label>
+                  <div class="kalk-slider-wrap">
+                    <input type="range" class="kalk-slider" id="f-buffer" min="0" max="40" step="5" value="15">
+                    <span class="kalk-slider-val" id="f-buf-val">15%</span>
+                  </div>
+                  <p class="kalk-micro">Kostnadsoverskridelse er vanlig. 15–20% buffer anbefales alltid.</p>
+                </div>
+                <div class="kalk-fields-2">
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="f-finansk">Finanskost.</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="f-finansk" value="120000" min="0" step="10000">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                    <p class="kalk-micro">Renter i byggeperiode</p>
+                  </div>
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="f-diverse">Diverse</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="f-diverse" value="30000" min="0" step="5000">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="kalk-input-section">
+              <span class="kalk-section-label">Salg</span>
+              <div class="kalk-fields">
+                <div class="kalk-field">
+                  <label class="kalk-label" for="f-salgspris">
+                    Forventet salgspris
+                    <span class="kalk-label-hint">Etter renovering</span>
+                  </label>
+                  <div class="kalk-input-wrap">
+                    <input type="number" class="kalk-input" id="f-salgspris" value="8900000" min="0" step="100000">
+                    <span class="kalk-input-suffix">kr</span>
+                  </div>
+                </div>
+                <div class="kalk-fields-2">
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="f-meglersalg">Meglerhonorar</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="f-meglersalg" value="222500" min="0" step="5000">
+                      <span class="kalk-input-suffix">kr</span>
+                    </div>
+                    <p class="kalk-micro">Typisk 2,5%</p>
+                  </div>
+                  <div class="kalk-field">
+                    <label class="kalk-label" for="f-skatt">Skatt</label>
+                    <div class="kalk-input-wrap">
+                      <input type="number" class="kalk-input" id="f-skatt" value="22" min="0" max="50" step="1">
+                      <span class="kalk-input-suffix">%</span>
+                    </div>
+                    <p class="kalk-micro">22% av gevinst (forenklet)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="kalk-results" id="f-results"></div>
+
+        </div>
+
+        <div class="kalk-faq">
+          <h2 class="kalk-faq-title">Slik beregner kalkulatoren</h2>
+          <div class="kalk-faq-grid">
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Hva er ROI?</p>
+              <p class="kalk-faq-a">Return on Investment = Netto gevinst ÷ Total investering × 100. Inkluderer kjøpspris + rehab + kostnader som grunnlag. Over 15% netto ROI er et solid flipp-prosjekt.</p>
+            </div>
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Bør jeg inkludere buffer?</p>
+              <p class="kalk-faq-a">Alltid. Kostnadsoverskridelse er regelen, ikke unntaket i norsk rehabilitering. Sett 15% som minimum, 20–25% for eldre bygg eller ukjente konstruksjoner.</p>
+            </div>
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Hva er finanskostnader?</p>
+              <p class="kalk-faq-a">Rentekostnader på lån i byggeperioden. Med 8,5 M finansiert til 5,25% i 9 måneder utgjør dette ca. 315 000 kr. Ikke glem dette — det spiser direkte av fortjenesten.</p>
+            </div>
+            <div class="kalk-faq-item">
+              <p class="kalk-faq-q">Når unngår jeg skatt?</p>
+              <p class="kalk-faq-a">Gevinst på salg av bolig er skattefri hvis du har eid boligen i minst 1 år og bodd der i minst 1 av de 2 siste årene. Konsulter alltid regnskapsfører — dette er en forenkling.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="kalk-share">
+        <div class="kalk-share-text">
+          <div class="kalk-share-title">Se alle objekter med ferdig beregnet yield</div>
+          <div class="kalk-share-sub">Filtrert og analysert for investorer</div>
+        </div>
+        <div class="kalk-share-actions">
+          <a href="sok.html" class="btn btn-gold">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Søk objekter
+          </a>
+          <a href="premium.html#priser" class="btn btn-secondary" style="border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);background:transparent">
+            Se prisplaner
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/kalkulator.js"></script>
+</body>
+</html>

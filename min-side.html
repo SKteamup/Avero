@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Min side — EiendomsAnalyse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/auth.css">
+</head>
+<body>
+<div class="page-wrapper">
+  <div id="navbar-root"></div>
+
+  <main class="page-main dash-page">
+
+    <div class="dash-topbar">
+      <div class="container">
+        <div class="dash-topbar-inner">
+          <div>
+            <h1 class="dash-greeting" id="dash-greeting">God dag</h1>
+            <p class="dash-greeting-sub">Her finner du dine lagrede søk, favoritter og kontoinnstillinger.</p>
+          </div>
+          <div class="dash-topbar-actions">
+            <span class="dash-plan-badge gratis" id="dash-plan-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Gratisplan
+            </span>
+            <a href="premium.html#priser" class="btn btn-primary btn-sm">Oppgrader til Pro →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-tabs-wrap">
+      <div class="container">
+        <div class="dash-tabs" role="tablist">
+          <button class="dash-tab active" id="tab-soks" onclick="switchDashTab('soks')" role="tab" aria-selected="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+            Lagrede søk
+            <span class="dash-tab-count" id="tab-soks-count">0</span>
+          </button>
+          <button class="dash-tab" id="tab-favs" onclick="switchDashTab('favs')" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Favoritter
+            <span class="dash-tab-count" id="tab-favs-count">0</span>
+          </button>
+          <button class="dash-tab" id="tab-konto" onclick="switchDashTab('konto')" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Konto
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-content">
+      <div class="container">
+
+        <div class="dash-panel active" id="panel-soks">
+
+          <div class="dash-upsell" id="soks-upsell" style="display:none">
+            <div class="dash-upsell-text">
+              <div class="dash-upsell-title">Du har brukt det lagrede søket ditt</div>
+              <div class="dash-upsell-desc">Gratisplanen inkluderer 1 lagret søk. Oppgrader til Pro for 10 lagrede søk og e-postvarsler.</div>
+            </div>
+            <a href="premium.html#priser" class="btn btn-gold btn-sm">Se Pro →</a>
+          </div>
+
+          <div class="dash-panel-header">
+            <div>
+              <div class="dash-panel-title">Lagrede søk</div>
+              <div class="dash-panel-subtitle" id="soks-subtitle">Søk automatisk etter nye objekter</div>
+            </div>
+            <a href="sok.html" class="btn btn-primary btn-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nytt søk
+            </a>
+          </div>
+
+          <div id="soks-list"></div>
+
+        </div>
+
+        <div class="dash-panel" id="panel-favs">
+
+          <div class="dash-panel-header">
+            <div>
+              <div class="dash-panel-title">Favoritter</div>
+              <div class="dash-panel-subtitle" id="favs-subtitle">Objekter du har merket for videre vurdering</div>
+            </div>
+            <a href="sok.html" class="btn btn-secondary btn-sm">Søk objekter</a>
+          </div>
+
+          <div id="favs-grid"></div>
+
+        </div>
+
+        <div class="dash-panel" id="panel-konto">
+          <div class="dash-account-grid">
+
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title">Kontoopplysninger</span>
+                <button class="btn btn-secondary btn-sm" onclick="showToast('Redigering kommer snart', 'info')">Rediger</button>
+              </div>
+              <div class="dash-card-body">
+                <div class="dash-info-row"><span class="dash-info-label">Navn</span><span class="dash-info-value" id="account-name">—</span></div>
+                <div class="dash-info-row"><span class="dash-info-label">E-post</span><span class="dash-info-value" id="account-email">—</span></div>
+                <div class="dash-info-row"><span class="dash-info-label">Registrert</span><span class="dash-info-value" id="account-created">—</span></div>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title">Plan og abonnement</span>
+              </div>
+              <div class="dash-card-body">
+                <div class="dash-info-row"><span class="dash-info-label">Aktiv plan</span><span class="dash-info-value" id="plan-name-row">Gratis</span></div>
+                <div class="dash-info-row"><span class="dash-info-label">Lagrede søk</span><span class="dash-info-value" id="plan-soks">1 av 1</span></div>
+                <div class="dash-info-row"><span class="dash-info-label">E-postvarsler</span><span class="dash-info-value" style="color:var(--gray-400)">Ikke inkludert</span></div>
+                <a href="premium.html#priser" class="btn btn-primary btn-sm" style="margin-top:4px">Oppgrader til Pro</a>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title">Sikkerhet</span>
+              </div>
+              <div class="dash-card-body">
+                <div class="dash-info-row"><span class="dash-info-label">Passord</span><span class="dash-info-value">••••••••</span></div>
+                <button class="btn btn-secondary btn-sm" style="margin-top:4px" onclick="showToast('Passordlenke sendt til e-post', 'success')">Endre passord</button>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-header">
+                <span class="dash-card-title">Varslingsinnstillinger</span>
+              </div>
+              <div class="dash-card-body">
+                <div class="dash-info-row">
+                  <span class="dash-info-label">Ukentlig oppsummering</span>
+                  <input type="checkbox" checked style="accent-color:var(--navy);width:16px;height:16px;cursor:pointer">
+                </div>
+                <div class="dash-info-row">
+                  <span class="dash-info-label" style="color:var(--gray-400)">E-postvarsler (Pro)</span>
+                  <input type="checkbox" disabled style="width:16px;height:16px;cursor:not-allowed;opacity:.35">
+                </div>
+                <p style="font-size:12px;color:var(--gray-400);margin-top:4px">E-postvarsler krever Pro-abonnement.</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:24px;background:white;border:1px solid var(--gray-200);border-radius:var(--radius-xl);overflow:hidden">
+            <div class="dash-card-header" style="border-bottom:1px solid var(--gray-100)">
+              <span class="dash-card-title" style="color:var(--red)">Slett konto</span>
+            </div>
+            <div style="padding:16px 18px">
+              <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;line-height:1.6">Å slette kontoen fjerner alle dine lagrede søk, favoritter og notater permanent. Handlingen kan ikke angres.</p>
+              <button class="btn btn-sm" style="color:var(--red);border-color:var(--gray-200)" onclick="showToast('Ta kontakt på hei@eiendomsanalyse.no for sletting', 'info')">
+                Slett konto
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-root"></div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script type="module" src="js/supabase/init.js"></script>
+<script type="module" src="js/min-side.js"></script>
+</body>
+</html>

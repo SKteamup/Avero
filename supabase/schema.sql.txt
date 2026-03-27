@@ -1,0 +1,587 @@
+-- ============================================================
+--  EIENDOMSANALYSE — SUPABASE DATABASE SCHEMA v1
+--  Kjør dette i Supabase SQL Editor (Settings → SQL Editor)
+--  i rekkefølgen det er skrevet.
+-- ============================================================
+
+-- ── 0. EXTENSIONS ──────────────────────────────────────────
+create extension if not exists "uuid-ossp";
+
+
+-- ============================================================
+--  1. PROFILES
+--  Utvider auth.users med plan og navn.
+--  Opprettes automatisk via trigger når bruker registrerer seg.
+-- ============================================================
+
+create table public.profiles (
+  id          uuid        primary key references auth.users(id) on delete cascade,
+  navn        text        not null default '',
+  epost       text        not null default '',
+  plan        text        not null default 'gratis'
+                          check (plan in ('gratis', 'pro', 'investor')),
+  aktiv       boolean     not null default true,
+  opprettet   timestamptz not null default now(),
+  oppdatert   timestamptz not null default now()
+);
+
+-- Trigger: lag profil automatisk når bruker registrerer seg
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.profiles (id, navn, epost)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'navn', ''),
+    new.email
+  );
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+
+-- Trigger: hold oppdatert-felt synkronisert
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.oppdatert = now();
+  return new;
+end;
+$$;
+
+create trigger profiles_updated_at
+  before update on public.profiles
+  for each row execute procedure public.set_updated_at();
+
+
+-- ============================================================
+--  2. OBJEKTER
+--  Alle investeringsobjekter. Admins skriver, alle leser
+--  objekter med status = 'publisert'.
+-- ============================================================
+
+create table public.objekter (
+  id                      uuid        primary key default uuid_generate_v4(),
+
+  -- Identifikasjon
+  tittel                  text        not null,
+  adresse                 text        not null default '',
+  by                      text        not null default '',
+  fylke                   text        not null default '',
+
+  -- Klassifisering
+  type                    text        not null default 'Leilighet'
+                          check (type in (
+                            'Leilighet','Tomannsbolig','Enebolig',
+                            'Rekkehus','Næringseiendom'
+                          )),
+  strategi                text        not null default 'utleie'
+                          check (strategi in ('utleie','flipp')),
+  eierform                text        not null default 'Selveier'
+                          check (eierform in ('Selveier','Andel','Aksje')),
+
+  -- Fysiske data
+  rom                     integer     not null default 0,
+  areal                   integer     not null default 0,
+  etasje                  text,
+  byggeaar                integer,
+
+  -- Pris
+  prisantydning           bigint      not null default 0,
+  fellesgjeld             bigint      not null default 0,
+  total_pris              bigint      generated always as (prisantydning + fellesgjeld) stored,
+  felleskostnader         integer     not null default 0,
+
+  -- Utleie-data (nullable — kun relevant for utleie-strategi)
+  leieinntekt_estimat     integer,
+  yield_estimat           numeric(5,2),
+  netto_yield             numeric(5,2),
+  kontantstroem_estimat   integer,
+
+  -- Flipp-data (nullable — kun relevant for flipp-strategi)
+  rehab_kostnad           bigint,
+  estimert_salgsverdi     bigint,
+  brutto_fortjeneste      bigint,
+  flip_roi                numeric(5,2),
+
+  -- Investor-metadata
+  tilstand                text        not null default 'God stand'
+                          check (tilstand in (
+                            'Nyoppusset','God stand',
+                            'Noe slitasje','Oppussing nødvendig'
+                          )),
+  utleiepotensial         text        not null default 'Høyt'
+                          check (utleiepotensial in (
+                            'Svært høyt','Høyt','Middels','Lavt'
+                          )),
+  investor_score          integer     not null default 70
+                          check (investor_score between 0 and 100),
+
+  -- Bilder (array av URL-er)
+  bilder                  text[]      not null default '{}',
+
+  -- Megler
+  megler_navn             text,
+  megler_firma            text,
+  original_annonse        text,
+
+  -- Nabolag (enkel JSON-blob)
+  nabolag                 jsonb       not null default '{}',
+
+  -- Fasiliteter (array)
+  fasiliteter             text[]      not null default '{}',
+
+  -- Beskrivelse
+  beskrivelse             text,
+
+  -- Administrasjon
+  status                  text        not null default 'utkast'
+                          check (status in ('publisert','utkast','inaktiv')),
+  premium                 boolean     not null default false,
+  opprettet_av            uuid        references auth.users(id) on delete set null,
+  opprettet               timestamptz not null default now(),
+  oppdatert               timestamptz not null default now()
+);
+
+create trigger objekter_updated_at
+  before update on public.objekter
+  for each row execute procedure public.set_updated_at();
+
+-- Indekser for søk og filtrering
+create index objekter_status_idx         on public.objekter(status);
+create index objekter_by_idx             on public.objekter(by);
+create index objekter_strategi_idx       on public.objekter(strategi);
+create index objekter_yield_idx          on public.objekter(yield_estimat);
+create index objekter_pris_idx           on public.objekter(prisantydning);
+create index objekter_score_idx          on public.objekter(investor_score);
+create index objekter_opprettet_idx      on public.objekter(opprettet desc);
+create index objekter_fulltext_idx       on public.objekter
+  using gin(to_tsvector('norwegian', tittel || ' ' || coalesce(adresse,'') || ' ' || by));
+
+
+-- ============================================================
+--  3. FAVORITTER
+--  Mange-til-mange mellom brukere og objekter.
+-- ============================================================
+
+create table public.favoritter (
+  id            uuid        primary key default uuid_generate_v4(),
+  bruker_id     uuid        not null references auth.users(id) on delete cascade,
+  objekt_id     uuid        not null references public.objekter(id) on delete cascade,
+  opprettet     timestamptz not null default now(),
+
+  unique (bruker_id, objekt_id)
+);
+
+create index favoritter_bruker_idx on public.favoritter(bruker_id);
+create index favoritter_objekt_idx on public.favoritter(objekt_id);
+
+
+-- ============================================================
+--  4. LAGREDE SØK
+--  Brukeren sine lagrede søkeprofiler med valgfrie varsler.
+-- ============================================================
+
+create table public.lagrede_sok (
+  id              uuid        primary key default uuid_generate_v4(),
+  bruker_id       uuid        not null references auth.users(id) on delete cascade,
+  navn            text        not null,
+  filter          jsonb       not null default '{}',
+  filter_tekst    text        not null default '',
+  varsel_epost    boolean     not null default false,
+  varsel_sms      boolean     not null default false,
+  siste_treff     integer     not null default 0,
+  aktiv           boolean     not null default true,
+  opprettet       timestamptz not null default now(),
+  oppdatert       timestamptz not null default now()
+);
+
+create trigger lagrede_sok_updated_at
+  before update on public.lagrede_sok
+  for each row execute procedure public.set_updated_at();
+
+create index lagrede_sok_bruker_idx on public.lagrede_sok(bruker_id);
+
+
+-- ============================================================
+--  5. NOTATER
+--  Brukerens private notater per objekt.
+-- ============================================================
+
+create table public.notater (
+  id          uuid        primary key default uuid_generate_v4(),
+  bruker_id   uuid        not null references auth.users(id) on delete cascade,
+  objekt_id   uuid        not null references public.objekter(id) on delete cascade,
+  innhold     text        not null default '',
+  opprettet   timestamptz not null default now(),
+  oppdatert   timestamptz not null default now(),
+
+  unique (bruker_id, objekt_id)
+);
+
+create trigger notater_updated_at
+  before update on public.notater
+  for each row execute procedure public.set_updated_at();
+
+create index notater_bruker_idx on public.notater(bruker_id);
+
+
+-- ============================================================
+--  6. ADMINS
+--  Enkel tabell for hvem som har admin-tilgang.
+--  I v1: manuelt vedlikeholdt via SQL.
+-- ============================================================
+
+create table public.admins (
+  id          uuid        primary key references auth.users(id) on delete cascade,
+  opprettet   timestamptz not null default now()
+);
+
+-- Hjelpefunksjon: sjekk om innlogget bruker er admin
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+stable
+as $$
+  select exists (
+    select 1 from public.admins
+    where id = auth.uid()
+  );
+$$;
+
+
+-- ============================================================
+--  7. ROW LEVEL SECURITY (RLS)
+-- ============================================================
+
+-- ── profiles ────────────────────────────────────────────────
+alter table public.profiles enable row level security;
+
+-- Brukere kan kun se og endre sin egen profil
+create policy "profiles: bruker leser egen"
+  on public.profiles for select
+  using (auth.uid() = id);
+
+create policy "profiles: bruker oppdaterer egen"
+  on public.profiles for update
+  using (auth.uid() = id)
+  with check (auth.uid() = id);
+
+-- Admin kan lese alle profiler
+create policy "profiles: admin leser alle"
+  on public.profiles for select
+  using (public.is_admin());
+
+
+-- ── objekter ─────────────────────────────────────────────────
+alter table public.objekter enable row level security;
+
+-- Alle kan lese publiserte, ikke-premium objekter
+create policy "objekter: alle leser publiserte åpne"
+  on public.objekter for select
+  using (
+    status = 'publisert'
+    and premium = false
+  );
+
+-- Innloggede Pro/Investor-brukere kan lese premium-objekter
+create policy "objekter: pro leser premium"
+  on public.objekter for select
+  using (
+    status = 'publisert'
+    and premium = true
+    and exists (
+      select 1 from public.profiles
+      where id = auth.uid()
+      and plan in ('pro', 'investor')
+    )
+  );
+
+-- Admin kan lese alle (inkl. utkast/inaktive)
+create policy "objekter: admin leser alle"
+  on public.objekter for select
+  using (public.is_admin());
+
+-- Admin kan opprette, oppdatere og slette
+create policy "objekter: admin insert"
+  on public.objekter for insert
+  with check (public.is_admin());
+
+create policy "objekter: admin update"
+  on public.objekter for update
+  using (public.is_admin());
+
+create policy "objekter: admin delete"
+  on public.objekter for delete
+  using (public.is_admin());
+
+
+-- ── favoritter ───────────────────────────────────────────────
+alter table public.favoritter enable row level security;
+
+create policy "favoritter: bruker leser egne"
+  on public.favoritter for select
+  using (auth.uid() = bruker_id);
+
+create policy "favoritter: bruker legger til"
+  on public.favoritter for insert
+  with check (auth.uid() = bruker_id);
+
+create policy "favoritter: bruker sletter egne"
+  on public.favoritter for delete
+  using (auth.uid() = bruker_id);
+
+
+-- ── lagrede_sok ──────────────────────────────────────────────
+alter table public.lagrede_sok enable row level security;
+
+create policy "lagrede_sok: bruker leser egne"
+  on public.lagrede_sok for select
+  using (auth.uid() = bruker_id);
+
+create policy "lagrede_sok: bruker insert"
+  on public.lagrede_sok for insert
+  with check (
+    auth.uid() = bruker_id
+    -- Gratis: maks 1 lagret søk
+    and (
+      (select plan from public.profiles where id = auth.uid()) != 'gratis'
+      or (
+        select count(*) from public.lagrede_sok
+        where bruker_id = auth.uid()
+      ) < 1
+    )
+    -- Pro: maks 10 lagrede søk
+    and (
+      (select plan from public.profiles where id = auth.uid()) = 'investor'
+      or (
+        select count(*) from public.lagrede_sok
+        where bruker_id = auth.uid()
+      ) < 10
+    )
+  );
+
+create policy "lagrede_sok: bruker update egne"
+  on public.lagrede_sok for update
+  using (auth.uid() = bruker_id)
+  with check (auth.uid() = bruker_id);
+
+create policy "lagrede_sok: bruker sletter egne"
+  on public.lagrede_sok for delete
+  using (auth.uid() = bruker_id);
+
+
+-- ── notater ──────────────────────────────────────────────────
+alter table public.notater enable row level security;
+
+create policy "notater: bruker leser egne"
+  on public.notater for select
+  using (auth.uid() = bruker_id);
+
+create policy "notater: bruker insert"
+  on public.notater for insert
+  with check (auth.uid() = bruker_id);
+
+create policy "notater: bruker update egne"
+  on public.notater for update
+  using (auth.uid() = bruker_id)
+  with check (auth.uid() = bruker_id);
+
+create policy "notater: bruker sletter egne"
+  on public.notater for delete
+  using (auth.uid() = bruker_id);
+
+
+-- ── admins ───────────────────────────────────────────────────
+alter table public.admins enable row level security;
+
+-- Ingen leseaksess via RLS — admin-sjekk skjer via is_admin()
+-- Admin-tabellen styres manuelt via SQL av prosjekteier
+
+
+-- ============================================================
+--  8. HJELPEFUNKSJONER FOR SØKE-API
+-- ============================================================
+
+-- Søk i objekter med filtre (kalt fra frontend via rpc())
+-- Returnerer kun data brukeren har tilgang til (RLS gjelder)
+create or replace function public.sok_objekter(
+  p_by            text    default null,
+  p_strategi      text    default null,
+  p_type          text[]  default null,
+  p_eierform      text[]  default null,
+  p_tilstand      text[]  default null,
+  p_potensial     text[]  default null,
+  p_pris_fra      bigint  default null,
+  p_pris_til      bigint  default null,
+  p_fellesgjeld_max bigint default null,
+  p_rom_fra       integer default null,
+  p_rom_til       integer default null,
+  p_areal_fra     integer default null,
+  p_areal_til     integer default null,
+  p_yield_min     numeric default null,
+  p_netto_yield_min numeric default null,
+  p_flip_roi_min  numeric default null,
+  p_score_min     integer default null,
+  p_tekst         text    default null,
+  p_sortering     text    default 'nyeste',
+  p_limit         integer default 50,
+  p_offset        integer default 0
+)
+returns setof public.objekter
+language sql
+security definer
+stable
+as $$
+  select * from public.objekter
+  where
+    -- RLS: kun det brukeren har tilgang til
+    (
+      (status = 'publisert' and premium = false)
+      or (status = 'publisert' and premium = true and exists (
+        select 1 from public.profiles
+        where id = auth.uid() and plan in ('pro', 'investor')
+      ))
+      or public.is_admin()
+    )
+    -- Filtre
+    and (p_by           is null or by = p_by)
+    and (p_strategi     is null or strategi = p_strategi)
+    and (p_type         is null or type = any(p_type))
+    and (p_eierform     is null or eierform = any(p_eierform))
+    and (p_tilstand     is null or tilstand = any(p_tilstand))
+    and (p_potensial    is null or utleiepotensial = any(p_potensial))
+    and (p_pris_fra     is null or prisantydning >= p_pris_fra)
+    and (p_pris_til     is null or prisantydning <= p_pris_til)
+    and (p_fellesgjeld_max is null or fellesgjeld <= p_fellesgjeld_max)
+    and (p_rom_fra      is null or rom >= p_rom_fra)
+    and (p_rom_til      is null or rom <= p_rom_til)
+    and (p_areal_fra    is null or areal >= p_areal_fra)
+    and (p_areal_til    is null or areal <= p_areal_til)
+    and (p_yield_min    is null or yield_estimat >= p_yield_min)
+    and (p_netto_yield_min is null or netto_yield >= p_netto_yield_min)
+    and (p_flip_roi_min is null or flip_roi >= p_flip_roi_min)
+    and (p_score_min    is null or investor_score >= p_score_min)
+    and (
+      p_tekst is null
+      or to_tsvector('norwegian', tittel || ' ' || coalesce(adresse,'') || ' ' || by)
+         @@ plainto_tsquery('norwegian', p_tekst)
+    )
+  order by
+    case p_sortering
+      when 'nyeste'      then extract(epoch from opprettet)
+      when 'pris_asc'    then prisantydning::float
+      when 'pris_desc'   then -prisantydning::float
+      when 'yield_desc'  then -coalesce(yield_estimat, 0)::float
+      when 'score_desc'  then -investor_score::float
+      when 'areal_desc'  then -areal::float
+      else extract(epoch from opprettet)
+    end desc
+  limit  p_limit
+  offset p_offset;
+$$;
+
+
+-- ============================================================
+--  9. SEEDING — sett inn testdata (kjør én gang i dev)
+-- ============================================================
+
+-- Legg til admin-bruker (bytt ut UUID etter at du har registrert deg):
+-- insert into public.admins (id) values ('DIN-UUID-HER');
+
+-- Sett inn eksempelobjekter (tilpass etter behov):
+insert into public.objekter (
+  tittel, adresse, by, fylke, type, strategi, eierform,
+  rom, areal, etasje, byggeaar,
+  prisantydning, fellesgjeld, felleskostnader,
+  leieinntekt_estimat, yield_estimat, netto_yield, kontantstroem_estimat,
+  tilstand, utleiepotensial, investor_score,
+  bilder, megler_navn, megler_firma,
+  beskrivelse, status, premium
+) values
+(
+  'Ekebergveien 14', 'Ekebergveien 14, 0192 Oslo', 'Oslo', 'Oslo',
+  'Leilighet', 'utleie', 'Andel', 3, 72, '3. etasje', 1987,
+  4200000, 420000, 2800, 14500, 5.2, 3.0, 2340,
+  'God stand', 'Høyt', 74,
+  ARRAY['https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800&q=80'],
+  'Morten Hagen', 'DNB Eiendom Oslo',
+  'Pen og gjennomgående 3-roms leilighet på Ekeberg.',
+  'publisert', false
+),
+(
+  'Holmenveien 3', 'Holmenveien 3, 0374 Oslo', 'Oslo', 'Oslo',
+  'Tomannsbolig', 'flipp', 'Selveier', 5, 148, '2-etasjes', 1962,
+  6800000, 0, 0, null, null, null, null,
+  'Oppussing nødvendig', 'Middels', 68,
+  ARRAY['https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&q=80'],
+  'Silje Andreassen', 'Krogsveen Majorstuen',
+  'Solid tomannsbolig på Holmen med stort potensial.',
+  'publisert', false
+),
+(
+  'Storgata 22', 'Storgata 22, 5015 Bergen', 'Bergen', 'Vestland',
+  'Leilighet', 'utleie', 'Andel', 2, 55, '2. etasje', 1975,
+  2800000, 185000, 2100, 12500, 5.7, 4.2, 2850,
+  'God stand', 'Høyt', 79,
+  ARRAY['https://images.unsplash.com/photo-1555636222-cae831e670b3?w=800&q=80'],
+  'Kristian Lie', 'Aktiv Bergen Sentrum',
+  'Sentralt beliggende 2-roms i Bergen sentrum.',
+  'publisert', false
+),
+(
+  'Nedre Elvehavn 7', 'Nedre Elvehavn 7, 7042 Trondheim', 'Trondheim', 'Trøndelag',
+  'Leilighet', 'utleie', 'Selveier', 3, 68, '4. etasje', 2015,
+  3900000, 320000, 3600, 15500, 5.4, 3.4, 2710,
+  'Nyoppusset', 'Svært høyt', 82,
+  ARRAY['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80'],
+  'Hanne Mikkelsen', 'EiendomsMegler 1 Trondheim',
+  'Premium 3-roms ved Nedre Elvehavn.',
+  'publisert', true
+);
+
+
+-- ============================================================
+--  10. NYTTIGE VIEWS (valgfritt, for rapportering)
+-- ============================================================
+
+create or replace view public.objekter_statistikk as
+select
+  count(*)                                          as totalt,
+  count(*) filter (where status = 'publisert')      as publisert,
+  count(*) filter (where status = 'utkast')         as utkast,
+  count(*) filter (where status = 'inaktiv')        as inaktiv,
+  count(*) filter (where premium = true)            as premium,
+  round(avg(yield_estimat), 2)                      as snitt_yield,
+  round(avg(investor_score), 1)                     as snitt_score,
+  round(avg(prisantydning / 1000000.0), 2)          as snitt_pris_mill
+from public.objekter;
+
+-- View: objekter med favorittantall (for admin-oversikt)
+create or replace view public.objekter_med_stats as
+select
+  o.*,
+  count(f.id) as antall_favoritter
+from public.objekter o
+left join public.favoritter f on f.objekt_id = o.id
+group by o.id;
+
+
+-- ============================================================
+--  FERDIG.
+--  Neste steg:
+--  1. Kjør dette scriptet i Supabase SQL Editor
+--  2. Gå til Authentication → Settings og aktiver Email auth
+--  3. Legg til SUPABASE_URL og SUPABASE_ANON_KEY i env
+--  4. Kjør: insert into admins (id) values ('<din-bruker-uuid>')
+-- ============================================================

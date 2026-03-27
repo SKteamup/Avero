@@ -1,0 +1,102 @@
+/* =============================================
+   DESIGNSYSTEM — VARIABLER
+   Investorplattform v1
+   ============================================= */
+
+:root {
+  /* --- FARGER: PRIMÆR --- */
+  --navy:        #0F1F3D;
+  --navy-hover:  #1E3A5F;
+  --navy-light:  #2A4A73;
+
+  /* --- FARGER: NØYTRAL --- */
+  --off-white:   #F7F8FA;
+  --white:       #FFFFFF;
+  --gray-50:     #F9FAFB;
+  --gray-100:    #F0F1F3;
+  --gray-200:    #E5E7EB;
+  --gray-300:    #D1D5DB;
+  --gray-400:    #9CA3AF;
+  --gray-500:    #6B7280;
+  --gray-700:    #374151;
+  --gray-900:    #111827;
+
+  /* --- FARGER: SEMANTISK --- */
+  --green:       #16A34A;
+  --green-light: #DCFCE7;
+  --amber:       #D97706;
+  --amber-light: #FEF3C7;
+  --red:         #DC2626;
+  --red-light:   #FEE2E2;
+  --blue:        #2563EB;
+  --blue-light:  #DBEAFE;
+
+  /* --- FARGER: AKSENT --- */
+  --gold:        #B08D57;
+  --gold-light:  #F5EDD9;
+
+  /* --- TYPOGRAFI --- */
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+
+  /* --- STØRRELSER --- */
+  --text-xs:   0.75rem;
+  --text-sm:   0.8125rem;
+  --text-base: 0.875rem;
+  --text-md:   1rem;
+  --text-lg:   1.125rem;
+  --text-xl:   1.25rem;
+  --text-2xl:  1.5rem;
+  --text-3xl:  2rem;
+  --text-4xl:  2.5rem;
+
+  /* --- SPACING (8px grid) --- */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+  --sp-24: 6rem;
+
+  /* --- BORDER RADIUS --- */
+  --radius-sm:  4px;
+  --radius-md:  6px;
+  --radius-lg:  8px;
+  --radius-xl:  12px;
+
+  /* --- SHADOWS --- */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.12);
+  --shadow-xl:  0 16px 40px rgba(0,0,0,0.14);
+
+  /* --- BORDERS --- */
+  --border:     1px solid var(--gray-300);
+  --border-2:   2px solid var(--gray-300);
+
+  /* --- TRANSITIONS --- */
+  --transition: 150ms ease;
+  --transition-md: 250ms ease;
+
+  /* --- LAYOUT --- */
+  --max-width: 1280px;
+  --sidebar-width: 280px;
+  --navbar-height: 52px;
+
+  /* --- SAFE AREA (iOS notch / home indicator) --- */
+  --safe-top:    env(safe-area-inset-top,    0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left,   0px);
+  --safe-right:  env(safe-area-inset-right,  0px);
+}
+
+@media (min-width: 768px) {
+  :root { --navbar-height: 64px; }
+}

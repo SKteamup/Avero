@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EiendomsAnalyse — Yield, kontantstrøm og ROI. Ferdig beregnet.</title>
+  <meta name="description" content="Søk og analyser norske investeringsobjekter. Beregn yield, kontantstrøm og break-even automatisk — for utleie og flipp. Start gratis.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/landing.css">
+</head>
+<body>
+<div class="page-wrapper">
+
+  <div id="navbar-root"></div>
+
+  <main class="page-main" style="padding-top:0">
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-inner">
+
+          <div class="hero-content">
+            <div class="hero-kicker">
+              <span class="hero-kicker-dot"></span>
+              Norsk eiendomsanalyse
+            </div>
+
+            <h1 class="hero-title" id="hero-title">
+              Slutt å gjette på<br>
+              om objektet <em>lønner seg.</em>
+            </h1>
+
+            <p class="hero-lead">
+              EiendomsAnalyse beregner <strong>yield, kontantstrøm og break-even</strong> automatisk — for hvert objekt du ser på. Filtrer på det som faktisk betyr noe for deg som investor.
+            </p>
+
+            <div class="hero-actions">
+              <a href="sok.html" class="hero-btn-primary">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Se aktuelle objekter
+              </a>
+              <a href="registrer.html" class="hero-btn-secondary">
+                Registrer deg gratis →
+              </a>
+            </div>
+
+            <div class="hero-microcopy">
+              <span class="hero-microcopy-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Ingen kredittkort
+              </span>
+              <span class="hero-microcopy-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                EST / FAKTA / KALK-merket data
+              </span>
+              <span class="hero-microcopy-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Åpen beta — gratis nå
+              </span>
+            </div>
+          </div>
+
+          <div class="hero-mockup" aria-hidden="true">
+            <div class="hero-mockup-card">
+              <div class="hero-mockup-topbar">
+                <span class="hero-mockup-address">Ekebergveien 14, Oslo</span>
+                <span class="hero-mockup-badge">● Analyse klar</span>
+              </div>
+              <div class="hero-kpi-grid">
+                <div class="hero-kpi">
+                  <div class="hero-kpi-label">Yield (netto est.)</div>
+                  <div class="hero-kpi-value positive">5,2%</div>
+                </div>
+                <div class="hero-kpi">
+                  <div class="hero-kpi-label">Mnd. kontantstrøm</div>
+                  <div class="hero-kpi-value positive">+2 340 kr</div>
+                </div>
+                <div class="hero-kpi">
+                  <div class="hero-kpi-label">Totalpris</div>
+                  <div class="hero-kpi-value">4,62 M</div>
+                </div>
+                <div class="hero-kpi">
+                  <div class="hero-kpi-label">Break-even</div>
+                  <div class="hero-kpi-value yellow">14,2 år</div>
+                </div>
+              </div>
+              <div class="hero-mockup-rows">
+                <div class="hero-mockup-row">
+                  <span class="hero-mockup-row-label">Leieinntekt (est.)</span>
+                  <span class="hero-mockup-row-value">14 500 kr/mnd</span>
+                </div>
+                <div class="hero-mockup-row">
+                  <span class="hero-mockup-row-label">Felleskostnader</span>
+                  <span class="hero-mockup-row-value neg">− 2 800 kr</span>
+                </div>
+                <div class="hero-mockup-row">
+                  <span class="hero-mockup-row-label">Renter + avdrag</span>
+                  <span class="hero-mockup-row-value neg">− 8 960 kr</span>
+                </div>
+                <div class="hero-mockup-row">
+                  <span class="hero-mockup-row-label">Vedlikehold (est.)</span>
+                  <span class="hero-mockup-row-value neg">− 400 kr</span>
+                </div>
+                <div class="hero-mockup-divider"></div>
+                <div class="hero-mockup-row">
+                  <span class="hero-mockup-row-label" style="color:rgba(255,255,255,0.6);font-weight:600">Netto per måned</span>
+                  <span class="hero-mockup-row-value tot">+ 2 340 kr</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <div class="trust-strip" role="region" aria-label="Plattformens nøkkeltall">
+      <div class="container">
+        <div class="trust-strip-inner">
+          <div class="trust-stat">
+            <div class="trust-stat-value">8</div>
+            <div class="trust-stat-label">Objekter i beta-listen</div>
+          </div>
+          <div class="trust-stat">
+            <div class="trust-stat-value">5,3%</div>
+            <div class="trust-stat-label">Snitt yield, beta-utvalget</div>
+          </div>
+          <div class="trust-stat">
+            <div class="trust-stat-value">3</div>
+            <div class="trust-stat-label">Norske byer dekket</div>
+          </div>
+          <div class="trust-stat">
+            <div class="trust-stat-value">Åpen beta</div>
+            <div class="trust-stat-label">Registrering er gratis nå</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="value-section" aria-labelledby="value-title">
+      <div class="container">
+        <div class="value-intro">
+          <p class="section-tag">Hva er dette?</p>
+          <h2 id="value-title">
+            En søkemotor for investorer —<br>ikke for boligkjøpere.
+          </h2>
+          <p>
+            Finn.no er bygget for folk som skal bo et sted. EiendomsAnalyse er bygget for deg som vil vite om objektet faktisk betaler seg. Søk på yield, filtrer på kontantstrøm, og se analysen ferdig beregnet når du åpner et objekt.
+          </p>
+        </div>
+
+        <div class="value-pillars">
+          <div class="value-pillar">
+            <span class="value-pillar-num">01 &mdash; Søk</span>
+            <h3 class="value-pillar-title">Filtrer på yield, ikke bare pris</h3>
+            <p class="value-pillar-text">
+              Velg by, strategi, minimums-yield og eiendomstype. Se et resultat av objekter som faktisk passer din profil — ikke alt som er til salgs.
+            </p>
+            <a href="sok.html" class="value-pillar-link">
+              Prøv søket
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="value-pillar">
+            <span class="value-pillar-num">02 &mdash; Analyser</span>
+            <h3 class="value-pillar-title">Analysen er klar når du åpner objektet</h3>
+            <p class="value-pillar-text">
+              Yield, kontantstrøm, break-even og finansieringskalkulator er allerede regnet ut. Juster tallene og se hva som skjer — uten en eneste Excel-formel.
+            </p>
+            <a href="objekt.html?id=obj-001" class="value-pillar-link">
+              Se eksempel
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+          <div class="value-pillar">
+            <span class="value-pillar-num">03 &mdash; Følg med</span>
+            <h3 class="value-pillar-title">Ikke gå glipp av et godt objekt igjen</h3>
+            <p class="value-pillar-text">
+              Lagre søket ditt. Få e-postvarsel når nye objekter matcher. Marker favoritter og kom tilbake med beslutningsgrunnlaget klart.
+            </p>
+            <a href="registrer.html" class="value-pillar-link">
+              Start gratis
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="usecase-section" aria-labelledby="usecase-title">
+      <div class="container">
+        <div class="usecase-intro">
+          <p class="section-tag">To strategier</p>
+          <h2 id="usecase-title">Utleie eller flipp — plattformen regner begge deler</h2>
+          <p>Det stilles ulike spørsmål avhengig av hva du vil gjøre med objektet. Vi har bygget separate analyseverktøy for begge strategier.</p>
+        </div>
+
+        <div class="usecase-panels">
+
+          <div class="usecase-panel">
+            <div class="usecase-panel-top utleie">
+              <span class="usecase-strategy-tag utleie">Langsiktig utleie</span>
+              <h3 class="usecase-headline">Er det lønnsomt å leie ut — etter alle kostnader?</h3>
+              <p class="usecase-body-text">
+                Det er lett å beregne leieinntekten. Det vanskeligere spørsmålet er hva som faktisk gjenstår etter renter, avdrag, felleskostnader og vedlikehold. Det svarer vi på.
+              </p>
+            </div>
+            <div class="usecase-panel-body">
+              <div class="usecase-numbers">
+                <div class="usecase-number">
+                  <span class="usecase-number-label">Yield</span>
+                  <span class="usecase-number-value pos">5,2%</span>
+                </div>
+                <div class="usecase-number">
+                  <span class="usecase-number-label">Mnd. CF</span>
+                  <span class="usecase-number-value pos">+2 340 kr</span>
+                </div>
+                <div class="usecase-number">
+                  <span class="usecase-number-label">Break-even</span>
+                  <span class="usecase-number-value nvy">14,2 år</span>
+                </div>
+              </div>
+              <div class="usecase-points">
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  Yield beregnet på faktisk totalpris, ikke bare prisantydning
+                </div>
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  Kontantstrøm etter renter, avdrag, felleskost og vedlikehold
+                </div>
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  Finansieringskalkulator — juster egenkapital og rente selv
+                </div>
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  Break-even og nøkkelratioer på én side
+                </div>
+              </div>
+              <a href="sok.html?strategi=utleie" class="usecase-cta">
+                Se utleie-objekter
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="usecase-panel">
+            <div class="usecase-panel-top flipp">
+              <span class="usecase-strategy-tag flipp">Kjøp og videresalg</span>
+              <h3 class="usecase-headline">Holder marginen — når du regner inn alt?</h3>
+              <p class="usecase-body-text">
+                Mange flipp-prosjekter ser lønnsomme ut før man legger inn rehab-kostnader, meglerhonorar og skatt. Vi hjelper deg å se den reelle fortjenesten før du byr.
+              </p>
+            </div>
+            <div class="usecase-panel-body">
+              <div class="usecase-numbers">
+                <div class="usecase-number">
+                  <span class="usecase-number-label">Rehab-est.</span>
+                  <span class="usecase-number-value amb">850 000</span>
+                </div>
+                <div class="usecase-number">
+                  <span class="usecase-number-label">Netto ROI</span>
+                  <span class="usecase-number-value pos">18,4%</span>
+                </div>
+                <div class="usecase-number">
+                  <span class="usecase-number-label">Fortjeneste</span>
+                  <span class="usecase-number-value pos">1,25 M</span>
+                </div>
+              </div>
+              <div class="usecase-points">
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  Estimert fortjeneste etter meglerhonorar og skatt
+                </div>
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  ROI beregnet på total investert kapital
+                </div>
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  Justerbare variabler: rehab-kostnad, salgspris og skattemodell
+                </div>
+                <div class="usecase-point">
+                  <span class="usecase-point-dot"></span>
+                  Sammenligningsgrunnlag mot lignende salgspriser i området
+                </div>
+              </div>
+              <a href="sok.html?strategi=flipp" class="usecase-cta">
+                Se flipp-objekter
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="features-section" aria-labelledby="features-title">
+      <div class="container">
+        <div class="features-intro">
+          <p class="section-tag" style="color:rgba(176,141,87,0.75)">Plattformens verktøy</p>
+          <h2 id="features-title">Det du faktisk trenger. Ingenting mer.</h2>
+          <p>Vi har ikke bygget en funksjonsliste. Vi har bygget svarene på spørsmålene investorer stiller seg før de bestemmer seg.</p>
+        </div>
+        <div class="features-grid">
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <h3 class="feature-title">Søk med investorfilter</h3>
+            <p class="feature-text">Filtrer på yield, strategi, by og eiendomstype. Se kun det som er relevant. Ingen støy fra vanlige boligkjøpsannonser.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
+            <h3 class="feature-title">Ferdigregnet analyse</h3>
+            <p class="feature-text">Yield, netto kontantstrøm og break-even er beregnet automatisk. Åpne et objekt — analysen er der.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg>
+            </div>
+            <h3 class="feature-title">Justerbar finansiering</h3>
+            <p class="feature-text">Sett inn din egenkapital, rente og løpetid. Se hva terminbeløp og total rentekostnad blir — i sanntid.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z" rx="2"/><path d="M8 12h8M12 8v8"/></svg>
+            </div>
+            <h3 class="feature-title">Flipp-kalkulator</h3>
+            <p class="feature-text">Kjøpspris pluss rehab minus megler og skatt. Netto fortjeneste og ROI på en side. Ingen overraskelser etter at du har kjøpt.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            </div>
+            <h3 class="feature-title">Lagrede søk og varsler</h3>
+            <p class="feature-text">Lagre søk og få e-post når nye objekter matcher. Sett kriteriene én gang — plattformen holder øye for deg.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <h3 class="feature-title">Favoritter og historikk</h3>
+            <p class="feature-text">Merk objekter du vil følge opp. Gå tilbake til analysen når du er klar. Ingenting forsvinner.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="how-section" aria-labelledby="how-title">
+      <div class="container">
+        <div class="how-section-header">
+          <p class="section-tag">Slik fungerer det</p>
+          <h2 id="how-title">Fra annonse til beslutning på under ti minutter</h2>
+        </div>
+        <div class="how-steps">
+          <div class="how-step">
+            <div class="how-step-index">
+              01
+              <div class="how-step-index-line"></div>
+            </div>
+            <h3 class="how-step-title">Søk og filtrer</h3>
+            <p class="how-step-text">
+              Velg by og strategi, sett minimums-yield og prisramme. Plattformen viser bare objekter som matcher det du faktisk leter etter.
+            </p>
+            <div class="how-step-time">
+              <span class="how-step-time-dot"></span>
+              ~2 minutter
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-index">
+              02
+              <div class="how-step-index-line"></div>
+            </div>
+            <h3 class="how-step-title">Åpne — analysen er der</h3>
+            <p class="how-step-text">
+              Yield, kontantstrøm, finansiering og break-even er ferdig beregnet. Juster egenkapital og rente. Se hva som faktisk gjenstår i lomma hver måned.
+            </p>
+            <div class="how-step-time">
+              <span class="how-step-time-dot"></span>
+              ~5 minutter
+            </div>
+          </div>
+          <div class="how-step">
+            <div class="how-step-index">
+              03
+              <div class="how-step-index-line"></div>
+            </div>
+            <h3 class="how-step-title">Lagre, forkast eller beslut</h3>
+            <p class="how-step-text">
+              Merk objekter du vil følge opp. Lagre søket og la plattformen varsle deg om nye treff. Kom tilbake når du er klar til å handle.
+            </p>
+            <div class="how-step-time">
+              <span class="how-step-time-dot"></span>
+              ~1 minutt
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="objects-section" aria-labelledby="objects-title">
+      <div class="container">
+        <div class="objects-header">
+          <div>
+            <p class="section-tag">Siste objekter</p>
+            <h2 id="objects-title">Aktuelle investeringsobjekter</h2>
+          </div>
+          <a href="sok.html" class="btn btn-secondary">Se aktuelle objekter →</a>
+        </div>
+        <div class="objects-grid" id="landing-objects">
+        </div>
+      </div>
+    </section>
+
+    <section class="pricing-section" aria-labelledby="pricing-title">
+      <div class="container">
+        <div class="pricing-intro">
+          <p class="section-tag" style="justify-content:center">Prisplaner</p>
+          <h2 id="pricing-title">Start gratis. Skaler når du er klar.</h2>
+          <p>Ingen binding. Kanseller når som helst. Grunnleggende analyse er alltid gratis.</p>
+        </div>
+
+        <div class="pricing-grid">
+
+          <div class="pricing-card">
+            <div class="pricing-plan-name">Gratis</div>
+            <div class="pricing-amount">
+              <span class="pricing-kr">0</span>
+              <span class="pricing-per">kr/mnd</span>
+            </div>
+            <p class="pricing-desc">Søk og analyser fritt. Se alle åpne objekter og test plattformen uten kostnad.</p>
+            <div class="pricing-features">
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Tilgang til alle åpne objekter
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Kalkulator (ubegrenset)
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                1 lagret søk
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-dash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span style="color:var(--gray-400)">Ingen varsler</span>
+              </div>
+            </div>
+            <div class="pricing-card-cta">
+              <a href="registrer.html" class="btn btn-secondary btn-full">Registrer gratis</a>
+            </div>
+          </div>
+
+          <div class="pricing-card featured">
+            <div class="pricing-featured-tag">Mest brukt</div>
+            <div class="pricing-plan-name">Pro</div>
+            <div class="pricing-amount">
+              <span class="pricing-kr">199</span>
+              <span class="pricing-per">kr/mnd</span>
+            </div>
+            <p class="pricing-desc">For investorer som søker aktivt og vil ha varsler og ubegrenset lagring.</p>
+            <div class="pricing-features">
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Alt i Gratis
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Premium-objekter låst opp
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                10 lagrede søk
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                E-postvarsler ved nye treff
+              </div>
+            </div>
+            <div class="pricing-card-cta">
+              <a href="registrer.html?plan=pro" class="btn btn-primary btn-full">Velg Pro</a>
+            </div>
+          </div>
+
+          <div class="pricing-card investor">
+            <div class="pricing-plan-name">Investor</div>
+            <div class="pricing-amount">
+              <span class="pricing-kr">499</span>
+              <span class="pricing-per">kr/mnd</span>
+            </div>
+            <p class="pricing-desc">Full tilgang, Excel-eksport og prioritert support for de mest aktive investorene.</p>
+            <div class="pricing-features">
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Alt i Pro
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Ubegrenset lagrede søk
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                Excel- og CSV-eksport
+              </div>
+              <div class="pricing-feature">
+                <svg class="pricing-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                SMS-varsler + prioritert support
+              </div>
+            </div>
+            <div class="pricing-card-cta">
+              <a href="registrer.html?plan=investor" class="btn btn-gold btn-full">Velg Investor</a>
+            </div>
+          </div>
+
+        </div>
+        <p class="pricing-note">
+          Alle priser inkl. mva &nbsp;·&nbsp; Ingen binding &nbsp;·&nbsp; Kanseller når som helst
+          &nbsp;·&nbsp; <a href="premium.html" style="color:var(--navy);font-weight:600">Full sammenligning →</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="quotes-section" aria-labelledby="quotes-title">
+      <div class="container">
+        <div class="quotes-section-header">
+          <p class="section-tag">Status</p>
+          <h2 id="quotes-title">Vi er i tidlig beta</h2>
+        </div>
+
+        <div class="beta-honest-grid">
+
+          <div class="beta-status-card">
+            <div class="beta-status-icon beta-status-icon--green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h3 class="beta-status-title">Hva som fungerer nå</h3>
+            <ul class="beta-status-list">
+              <li>Søk og filtrering på investor-relevante kriterier</li>
+              <li>Automatisk yield, kontantstrøm og break-even per objekt</li>
+              <li>Utleie- og flipp-kalkulator med justerbare variabler</li>
+              <li>Lagrede søk, favoritter og notater</li>
+              <li>Merkede datakilder (EST / FAKTA / KALK)</li>
+            </ul>
+          </div>
+
+          <div class="beta-status-card">
+            <div class="beta-status-icon beta-status-icon--amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <h3 class="beta-status-title">Hva som kommer</h3>
+            <ul class="beta-status-list">
+              <li>E-postvarsler når nye objekter matcher søket ditt</li>
+              <li>Bredere objektdekning — flere byer og meglere</li>
+              <li>Sammenligningsdata mot omsatte priser i nabolaget</li>
+              <li>Excel/CSV-eksport for porteføljeanalyse</li>
+              <li>Integrasjon mot offentlige registre (Kartverket, SSB)</li>
+            </ul>
+          </div>
+
+          <div class="beta-status-card beta-status-card--navy">
+            <h3 class="beta-status-title" style="color:white;margin-bottom:10px">Bli en tidlig bruker</h3>
+            <p style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.65;margin-bottom:18px">
+              Vi bygger dette for folk som tar eiendomsinvesteringer seriøst. Tilbakemeldinger fra tidlige brukere former hva vi bygger videre.
+            </p>
+            <a href="registrer.html" class="btn btn-gold btn-full" style="min-height:48px;font-size:14px">
+              Registrer deg gratis — ingen binding
+            </a>
+            <p style="font-size:11px;color:rgba(255,255,255,.35);margin-top:10px;text-align:center">
+              Ingen kredittkort. Du kan slette kontoen når som helst.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="container">
+        <div class="faq-layout">
+          <div class="faq-sidebar">
+            <p class="section-tag">Spørsmål</p>
+            <h2 id="faq-title">Det du<br>lurer på</h2>
+            <p>Finner du ikke svaret her, ta kontakt på <a href="mailto:hei@eiendomsanalyse.no" style="color:var(--navy);font-weight:500">hei@eiendomsanalyse.no</a></p>
+            <a href="premium.html" class="btn btn-secondary btn-sm">Se alle planer →</a>
+          </div>
+          <div class="faq-list" id="faq-list">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section" aria-label="Kom i gang">
+      <div class="container">
+        <div class="cta-inner">
+          <p class="cta-pretitle">Kom i gang i dag</p>
+          <h2 class="cta-title">
+            Det første søket er gratis.<br>
+            Start der.
+          </h2>
+          <p class="cta-body">
+            Registrer deg og se hva objektet du funderer på faktisk gir i avkastning. Ingen binding, ingen kredittkort, ingen overraskelser.
+          </p>
+          <div class="cta-actions">
+            <a href="sok.html" class="hero-btn-primary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Søk objekter nå
+            </a>
+            <a href="registrer.html" class="hero-btn-secondary">
+              Opprett gratis konto
+            </a>
+          </div>
+          <p class="cta-fine">Gratis i åpen beta. Ingen kredittkort påkrevd.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="footer-root"></div>
+
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/landing.js"></script>
+</body>
+</html>
